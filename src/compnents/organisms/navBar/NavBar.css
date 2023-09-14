@@ -1,0 +1,20 @@
+.navContainer {
+  border-bottom: 1px solid #b8bec7;
+  background-color: white;
+  /* position: fixed; */
+  width: 100%;
+  /* z-index: 9990-[]; */
+}
+
+.navbar {
+  display: flex;
+  height: 78px;
+  justify-content: space-between;
+  margin: 0 5%;
+}
+
+.logo {
+  height: 60px;
+  width: 200px;
+  margin: auto 0;
+}
