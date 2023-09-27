@@ -2,7 +2,7 @@ import React from "react";
 
 export function useStorage(key, intialValue) {
   const [token, setStorToken] = React.useState(() => {
-    return localStorage.getItem(key) || intialValue;
+    return window.localStorage.getItem(key) || intialValue;
   });
 
   const setLocalStoragelsData = React.useCallback(
@@ -10,7 +10,8 @@ export function useStorage(key, intialValue) {
       console.log('\n\n in the useStorage', token)
       setStorToken(() => {
         if (token) {
-          localStorage.setItem(key, token);
+          console.log("\n\n in the useStorage", token);
+          window.localStorage.setItem(key, token);
         } else {
           console.log("no token to store in local storage");
           return;

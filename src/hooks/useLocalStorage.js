@@ -9,7 +9,7 @@ export function useLocalStorage(key, intialValue) {
     (lsData) => {
       setlsData(() => {
         if (lsData) {
-          localStorage.setItem(key, JSON.stringify(lsData));
+           window.localStorage.setItem(key, JSON.stringify(lsData));
         } else {
           console.log("no lsData to store in local storage");
           return;
