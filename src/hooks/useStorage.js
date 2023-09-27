@@ -2,7 +2,7 @@ import React from "react";
 
 export function useStorage(key, intialValue) {
   const [token, setStorToken] = React.useState(() => {
-    return JSON.parse(localStorage.getItem(key)) || intialValue;
+    return localStorage.getItem(key) || intialValue;
   });
 
   const setLocalStoragelsData = React.useCallback(
@@ -11,7 +11,7 @@ export function useStorage(key, intialValue) {
       setStorToken(() => {
         if (token) {
           console.log("\n\n in the useStorage", token);
-          const data = window.localStorage.setItem(key, JSON.stringify(token));
+          const data = window.localStorage.setItem(key, token);
           console.log(data)
         } else {
           console.log("no token to store in local storage");
