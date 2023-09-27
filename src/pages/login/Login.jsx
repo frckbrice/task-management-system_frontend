@@ -34,10 +34,10 @@ function Login() {
   const { setlsData } = useLocalStorage("setRefreshToken", " ");
   const { setStorToken } = useStorage("token", " ");
 
-  useEffect(() => {
-    // userRef.current.focus();
-    if (move) navigate("/onboarding");
-  }, [move, navigate]);
+  // useEffect(() => {
+  //   // userRef.current.focus();
+  //   if (move) navigate("/onboarding");
+  // }, [move, navigate]);
 
   useEffect(() => {
     setErrMsg("");
@@ -98,7 +98,7 @@ function Login() {
                         if (
                           response &&
                           response.data &&
-                          response.status === 200
+                          response.data.accessToken
                         ) {
                           setIsLoading(false);
                           setMove(true);
