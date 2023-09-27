@@ -3,12 +3,13 @@
 .sideNav {
   width: 210px;
   background-color: #fff;
-  height: 90vh;
+  /* height: 90vh; */
   border-left: 1px solid #d9d9d9;
   border-right: 1px solid #d9d9d9;
   padding: 8px;
-  overflow-x: hidden;
-  position: absolute;
+  /* overflow-x: hidden; */
+  bottom: 0;
+  /* position: relative; */
 }
 
 .title {
@@ -36,6 +37,10 @@
 .collaboProjects {
   min-height: 189px;
   margin-bottom: 20px;
+}
+
+.project-list {
+  margin-top: 10px;
 }
 
 .project-list,
@@ -99,18 +104,99 @@
 
 .members-list:hover {
   cursor: pointer;
-  border-left: 10px solid #1b34b5;
+  border-left: 15px solid #1b34b5;
+  background-color: #f1f1f1;
 }
 
 .addProjectBtn {
-  margin-top: 50px;
+  margin-bottom: 10px;
   display: flex;
-  background-color: #1b34b5;
+  /* background-color: #1b34b5; */
   justify-content: center;
   position: relative;
+}
+
+.addProjectBtn:hover {
+  cursor: pointer;
 }
 
 .action-icon {
   color: #fff;
   font-size: 20px;
+}
+
+/*  add project popup styles */
+
+.add-project-popup {
+  position: absolute;
+  left: 30px;
+  z-index: 5;
+}
+
+.add-project-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.add-project-form textarea {
+  outline: none;
+  padding: 5px;
+  border: 1px solid #d9d9d9;
+
+  height: 100px;
+  font-size: 12px;
+}
+
+.add-project-form input {
+  outline: none;
+  border: 1px solid #d9d9d9;
+  font-size: 10px;
+  padding: 2px;
+}
+
+.add-project-form button {
+  background-color: #242525;
+  color: #fff;
+  border: none;
+  padding: 2px;
+}
+
+.addProjectForm {
+  /* background-color: red; */
+  display: flex;
+  gap: 30;
+  flex-direction: column;
+  font-size: 12px;
+  font-weight: 400;
+  width: 100%;
+}
+
+.addProjectForm input {
+  outline: none;
+  border: 1px solid #d3d3d3;
+  font-size: 12px;
+  padding: 5px;
+}
+
+.addProjectForm textarea {
+  border: 1px solid #1b34b5;
+  /* background-color: green; */
+  width: 100%;
+}
+
+.addTextArea {
+  width: 100%;
+  border: 1px solid #1b34b5;
+  outline: none;
+  font-size: 1rem;
+}
+
+.addProjectForm button {
+  width: 100%;
+  background-color: #1b34b5;
+  padding: 2px;
+  border: none;
+  color: #fff;
 }

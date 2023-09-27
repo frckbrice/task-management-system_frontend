@@ -1,57 +1,60 @@
 @import url('https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@800&display=swap');
 
 .article2 {
-  padding: 60px;
+  padding: 50px 0;
   background-color: #04175A;
   display: flex;
   color: white;
-  margin: 50px auto;
   align-items: center;
-  justify-content: space-evenly;
-
+  justify-content: center;
 }
 
+.art2ImgDiv,
 .art2Text {
-  width: 22%;
-  /* margin: 0 5% 0 25%; */
+  width: 40%;
 }
 
-.art2Img {
-  width: 600px;
-  /* margin: 0 5% 0 35%; */
+.art2ImgDiv {
+  text-align: center;
+  margin-right: 10px;
 }
 
 .art2Text h4 {
   color: white;
-  font-size: 3.8em;
+  font-size: 45px;
+  text-align: center;
+  margin: 0 auto 20px;
   font-weight: 700;
   font-family: cursive;
-  margin-bottom: 20px;
 }
 
 .art2Text ul {
   list-style-type: none;
   counter-reset: li-counter;
-  font-size: 18px;
+  font-size: 17px;
+  margin: auto;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
   display: flex;
   flex-direction: column;
 }
 
 .art2Text ul li {
   margin: 0.7em;
-  padding: 0.5em;
+  padding: 10px 10px 10px 35px;
   z-index: 0;
-  /* position: sticky; */
+  width: 45%;
+  text-align: center;
   background-color: #04175A;
   border-radius: 25px;
-  box-shadow: 1px 1px 2px orange;
-  padding-left: 60px;
+  box-shadow: 1px 1px 2px #f48207;
   cursor: pointer;
   transition: all 0.3s ease-in-out;
 }
 
 .art2Text li:hover {
-  transform: translateX(-25px);
+  transform: translateX(-30px);
 }
 
 .art2Text ul li:before {
@@ -65,7 +68,7 @@
   font-weight: bold;
   text-align: center;
   color: white;
-  background-color: #add8e6b1;
+  background-color: #77cde9ba;
   transform: rotate(-20deg);
   -ms-transform: rotate(-20deg);
   -webkit-transform: rotate(-20deg);
@@ -76,18 +79,17 @@
 }
 
 @media screen and (max-width: 768px) {
-  .art2Img {
+  .art2ImgDiv {
     display: none;
   }
 
   .article2 {
-    padding: 10px;
+    padding: 20px 0;
     background-color: white;
-    /* margin-top: 0; */
   }
 
   .art2Text {
-    width: 88%;
+    width: 95%;
   }
 
   .art2Text h4 {
@@ -98,17 +100,18 @@
     font-family: cursive;
     margin-bottom: 20px;
   }
-  
+
   .art2Text ul {
     font-size: 14px;
   }
-  
+
   .art2Text ul li {
-    box-shadow: 3px 3px 2px orange;
+    box-shadow: 2px 2px 2px #f48207;
     cursor: auto;
     transition: none;
+    width: 70%;
   }
-  
+
   .art2Text li:hover {
     transform: none;
   }

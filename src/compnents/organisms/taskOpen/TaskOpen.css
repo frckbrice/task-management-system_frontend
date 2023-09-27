@@ -1,0 +1,153 @@
+.taskOpen {
+  position: absolute;
+  left: 30%;
+  /* top: 50%; */
+  display: flex;
+  margin: auto;
+  flex-direction: column;
+  width: 40vw;
+  background-color: #fff;
+  box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
+    rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+  min-height: 30vh;
+  justify-content: space-between;
+  padding: 5px 5px 10px;
+  z-index: 5;
+}
+
+.head-text {
+  display: flex;
+  justify-content: space-between;
+}
+
+.head-text p {
+  font-size: 12px;
+  font-style: italic;
+}
+
+.head-text button {
+  width: 30px;
+  background-color: transparent;
+  font-size: 20px;
+  border: none;
+  transition: 0.3s all ease-in-out;
+}
+
+.head-text button:hover {
+  cursor: pointer;
+}
+
+.actions {
+  display: flex;
+  margin: 10px 3px;
+  justify-content: space-between;
+}
+
+.content {
+  box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
+    rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+  margin: 5px;
+  padding: 5px;
+  color: #383737;
+}
+
+.content h3 {
+  font-size: 12px;
+  padding: 5px 2px;
+}
+
+.content p {
+  margin-top: 5px;
+  font-size: 12px;
+  padding: 5px 2px;
+}
+
+.updateBtn button {
+  background-color: transparent;
+  /* width: 30px; */
+  border: 1px solid #d3d3d3d3;
+  padding: 0 10px;
+  color: #1b34b5;
+
+  margin-right: 5px;
+  align-items: center;
+}
+
+.assign-task {
+  padding: 0 8px;
+  /* border-radius: 20px; */
+  border: 1px solid #d3d3d3d3;
+
+  color: #1b34b5;
+  outline: none;
+  padding: 0 5px;
+  background-color: transparent;
+  /* box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px; */
+  font-weight: 500;
+  transition: 0.3s all ease-in-out;
+}
+
+.assign-task:hover {
+  cursor: pointer;
+}
+
+.assign-task:active {
+  box-shadow: rgba(0, 0, 0, 0.06) 0px 2px 4px 0px inset;
+}
+
+.task-member {
+  display: flex;
+}
+
+.assiign-member {
+  display: flex;
+  align-self: center;
+  flex-direction: column;
+  width: fit-content;
+}
+
+.assiign-member img {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
+
+.content-edit {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.content-edit input {
+  width: 85%;
+  outline: none;
+  padding: 2px;
+  border: 1px solid #d3d3d3d3;
+}
+.content-edit textarea {
+  border: 1px solid #d3d3d3d3;
+  outline: none;
+  font-size: 12px;
+  padding: 2px;
+  height: 80px;
+}
+.content-edit-head {
+  display: flex;
+  justify-content: space-between;
+}
+
+.content-edit-head button {
+  width: 12%;
+  border: 1px solid #d3d3d3d3;
+
+  background-color: #fff;
+  color: #1b34b5;
+}
+
+.taskOpen button {
+  transition: 0.3s ease-in-out;
+}
+
+.taskOpen button:hover {
+  cursor: pointer;
+}

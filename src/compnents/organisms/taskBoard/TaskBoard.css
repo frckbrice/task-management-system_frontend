@@ -1,0 +1,146 @@
+.task-board {
+  margin-top: 5px;
+  display: flex;
+  /* justify-content: center; */
+  height: 100%;
+  width: 82vw;
+  /* width: fit-content; */
+  overflow: scroll;
+  /* position: relative; */
+}
+
+.columns {
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
+}
+
+.droppable {
+  margin: 8px;
+  border: 1px solid #d9d9dd;
+  background-color: transparent;
+}
+
+.add-list {
+  height: 20px;
+  width: 90rem;
+}
+
+.msg,
+.list-hearder {
+  /* background-color: red; */
+  /* width: 100px; */
+  margin: 8px;
+  /* position: relative; */
+}
+
+.list-hearder h3 {
+  font-weight: 500;
+  font-size: 15px;
+}
+
+.add-list-btn {
+  width: 100%;
+  height: 30px;
+  margin-top: 5px;
+  border: 1px solid #d9d9dd;
+  background-color: #fff;
+  color: #1b34b5;
+}
+
+.add-list-btn:hover {
+  cursor: pointer;
+}
+
+.card {
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+    rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+}
+
+.task-card h3 {
+  color: #f48207;
+  text-transform: capitalize;
+  font-size: 12px;
+}
+
+.task-card p {
+  font-size: 10px;
+  color: #393838;
+}
+
+.add-task {
+  position: absolute;
+  left: 41%;
+  top: 40%;
+  z-index: 5;
+}
+
+.task-option-btn {
+  width: 100%;
+  background-color: #fff;
+  border: 1px solid #d9d9dd;
+  margin-top: 5px;
+}
+
+.add-list {
+  background-color: #fff;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  box-shadow: rgba(25, 3, 89, 0.24) 0px 3px 8px;
+  border: none;
+  position: fixed;
+  background-color: #1b34b5;
+  text-transform: capitalize;
+  color: #fff;
+  right: 0;
+  /* transition: all 0.3s ease-in-out; */
+}
+
+.add-list:hover {
+  cursor: pointer;
+  width: 61px;
+  height: 61px;
+}
+
+.add-list:active {
+  background-color: #0a144a;
+}
+
+.addListForm {
+  z-index: 5;
+  position: absolute;
+  right: 0;
+  margin-right: 5px;
+}
+
+.addForm {
+  width: 100%;
+}
+
+.addForm h4 {
+  color: #393838;
+  text-transform: capitalize;
+}
+
+.addForm input {
+  width: 99%;
+  outline: none;
+  border: 1px solid #d3d3d3;
+  margin-bottom: 5px;
+  font-size: 12px;
+  padding: 2px;
+}
+
+.addForm button {
+  width: 100%;
+  background-color: #1b34b5;
+  color: #fff;
+  border: none;
+  padding: 2px;
+  transition: 0.3s ease-in-out;
+}
+
+.addForm button:hover {
+  cursor: pointer;
+}
