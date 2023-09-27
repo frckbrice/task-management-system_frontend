@@ -10,9 +10,9 @@ export function useStorage(key, intialValue) {
       // console.log('\n\n in the useStorage', token)
       setStorToken(() => {
         if (token) {
-          console.log("\n\n in the useStorage", token);
-          const data = window.localStorage.setItem(key, token);
-          console.log(data)
+          console.log("\n\n in the useStorage:",key +"="+ token);
+         window.localStorage.setItem(key, token);
+          
         } else {
           console.log("no token to store in local storage");
           return;
