@@ -7,6 +7,7 @@ export function useStorage(key, intialValue) {
 
   const setLocalStoragelsData = React.useCallback(
     (token) => {
+      console.log('\n\n in the useStorage', token)
       setStorToken(() => {
         if (token) {
           localStorage.setItem(key, token);

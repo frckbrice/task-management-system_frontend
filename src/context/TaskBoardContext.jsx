@@ -16,6 +16,7 @@ const ContextProvider = ({ children }) => {
   const [profilePict, setProfilePict] = useState('');
 
   console.log("project data", projectData);
+  
 
   const values = {
     errorMsg,
