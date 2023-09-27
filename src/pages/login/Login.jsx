@@ -47,6 +47,7 @@ function Login() {
   const login = useGoogleLogin({
     onSuccess: (codeResponse) => {
       console.log("login goood");
+      console.log(conf.googleapis);
       setIsLoading(true);
       setUser(codeResponse);
       if (codeResponse) {
@@ -58,7 +59,8 @@ function Login() {
             },
           })
           .then((res) => {
-            setProfile(res.data);
+            console.log(res.data)
+            // setProfile(res.data);
             if (res && res.data) {
               console.log("connection to the backend : registration");
               let data = {
