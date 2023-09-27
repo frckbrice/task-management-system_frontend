@@ -47,8 +47,9 @@ function Login() {
   const login = useGoogleLogin({
     onSuccess: (codeResponse) => {
       console.log("login goood");
-      console.log(conf.googleapis);
+     
       setIsLoading(true);
+       console.log(conf.googleapis);
       setUser(codeResponse);
       if (codeResponse) {
         axios
