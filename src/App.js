@@ -2,38 +2,83 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import LandingPage from "./pages/landing/LandingPage";
 import Dashboard from "./pages/dashboard/Dashboard";
-import Signup from "./pages/signup/Signup"
-import Login from "./pages/login/Login"
+import Signup from "./pages/signup/Signup";
+import Login from "./pages/login/Login";
+import OnBoarding from "./pages/onboarding/OnBoarding";
+import ContextProvider from "./context/TaskBoardContext";
+import Toaster from "react-hot-toast";
+// import ErrorPage from "./pages/errorPage/errorPage";
+import Page404 from "./pages/404/Page404";
+import PersistLogin from "./compnents/auth/PersistLogin";
 import ErrorPage from "./pages/errorPage/errorPage";
+import RequireAuth from './compnents/auth/RequireAuth'
+import ROLES from "./compnents/auth/RequireAuth";
+import ForgottenPassword from "./pages/forgottenPassword/ForgottenPassword";
+import VerifyEmail from "./pages/verifyEmail/VerifyEmail";
+import ResetPassword from "./pages/resetPassword/ResetPassword";
+import WelcomeMember from "./pages/welcomeMember/WelcomeMember";
 
 function App() {
   const router = createBrowserRouter([
     {
       path: "/",
       element: <LandingPage />,
-      errorElement: <ErrorPage />,
     },
     {
       path: "/signup",
       element: <Signup />,
-      errorElement: <ErrorPage />,
     },
     {
       path: "/login",
       element: <Login />,
-      errorElement: <ErrorPage />,
     },
     {
-      path: "/dashboard",
-      element: <Dashboard />,
-      errorElement: <ErrorPage />,
+      element: <PersistLogin />,
+
+      children: [
+        {
+          path: "/onboarding",
+          element: <OnBoarding />,
+          errorElement: <ErrorPage />,
+        },
+        {
+          path: "/dashboard",
+          element: <Dashboard />,
+          errorElement: <ErrorPage />,
+        },
+        {
+          path: "/invitation/:id",
+          element: <WelcomeMember />,
+        },
+      ],
+    },
+
+    {
+      path: "/forgottenPassword",
+      element: <ForgottenPassword />,
+    },
+    {
+      path: "/verifyEmail",
+      element: <VerifyEmail />,
+    },
+    {
+      path: "/resetPassword",
+      element: <ResetPassword />,
+    },
+
+    {
+      path: "*",
+      element: <Page404 />,
+      errorElement: <Page404 />,
     },
   ]);
 
   return (
-    <div className="App">
-      <RouterProvider router={router} />
-    </div>
+    <>
+      <ContextProvider>
+        <RouterProvider router={router} />
+      </ContextProvider>
+    </>
   );
 }
 
