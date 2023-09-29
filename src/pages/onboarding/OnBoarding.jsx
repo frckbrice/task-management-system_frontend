@@ -134,18 +134,18 @@ function OnBoarding() {
       } catch (err) {
         toast.error("Failed to create project.");
         console.log(err?.data?.message);
- if (!err.status) {
-   setErrMsg("No Server Response");
- } else if (err.status === 400) {
-   setErrMsg("Missing Username or Password");
- } else if (err.status === 401) {
-   setErrMsg("Unauthorized");
- } else if (err.status === 403) {
-   setErrMsg("Forbidden");
- } else {
-   setErrMsg(err.data?.message);
-   console.error(err.data?.message);
- }
+        if (!err.status) {
+          setErrMsg("No Server Response");
+        } else if (err.status === 400) {
+          setErrMsg("Missing Username or Password");
+        } else if (err.status === 401) {
+          setErrMsg("Unauthorized");
+        } else if (err.status === 403) {
+          setErrMsg("Forbidden");
+        } else {
+          setErrMsg(err.data?.message);
+          console.error(err.data?.message);
+        }
         setIsLoading(false);
       }
     } else {
@@ -184,18 +184,18 @@ function OnBoarding() {
       console.log(err?.data?.message);
       setMove(false);
       setIsLoading(false);
-       if (!err.status) {
-         setErrMsg("No Server Response");
-       } else if (err.status === 400) {
-         setErrMsg("Missing Username or Password");
-       } else if (err.status === 401) {
-         setErrMsg("Unauthorized");
-       } else if (err.status === 403) {
-         setErrMsg("Forbidden");
-       } else {
-         setErrMsg(err.data?.message);
-         console.error(err.data?.message);
-       }
+      if (!err.status) {
+        setErrMsg("No Server Response");
+      } else if (err.status === 400) {
+        setErrMsg("Missing Username or Password");
+      } else if (err.status === 401) {
+        setErrMsg("Unauthorized");
+      } else if (err.status === 403) {
+        setErrMsg("Forbidden");
+      } else {
+        setErrMsg(err.data?.message);
+        console.error(err.data?.message);
+      }
     }
   };
 
@@ -211,7 +211,9 @@ function OnBoarding() {
     <div className="onBoarding">
       {currentStep === 0 && (
         <div className="welcome-card">
-          <h1>welcome! {username}</h1>
+          <h1 className="wlcmHead">
+            welcome! <span>{username}</span>{" "}
+          </h1>
           <p>
             We are delighted to have you on board. We built{" "}
             <span>TaskTrec</span> to help you or you and your team stay
@@ -315,7 +317,7 @@ function OnBoarding() {
 
       {currentStep === 2 && (
         <div className="create-task">
-          <h2>Create tasks</h2>
+          <h2 className="crtTaskHead">Create tasks</h2>
           <p>
             Divide Your Project into tasks or assign the project to a member if
             it can be handled by just one person
@@ -356,7 +358,7 @@ function OnBoarding() {
 
       {currentStep === 3 && (
         <div className="invitation">
-          <h2>Invitation</h2>
+          <h2 className="inviteHead">Invitation</h2>
           <p>Invite your team members, share task and get started</p>
           <p>Search example @name...</p>
           <div className="cardForm">
@@ -382,8 +384,8 @@ function OnBoarding() {
 
       {currentStep === 4 && (
         <div className="congratulation">
-          <h1>Congratulations! "daisy"</h1>
-          <h3>You have created your first project on Tasktrec</h3>
+          <h1 className="congratH1">Congratulations! "daisy"</h1>
+          <h3>You have successfully created your first project on Tasktrec</h3>
           <p className="congratP">
             Explore more fields on your workspace like Project progress,
             sharing, and generating reports.

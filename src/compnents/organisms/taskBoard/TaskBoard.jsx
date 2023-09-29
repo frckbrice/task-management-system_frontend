@@ -4,6 +4,13 @@ import { v4 as uuid } from "uuid";
 // libery imports
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
+import Tippy from "@tippyjs/react";
+import "tippy.js/dist/tippy.css";
+// icon imports
+import { MdNavigateNext } from "react-icons/md";
+import { GrFormPrevious } from "react-icons/gr";
+import { AiOutlineDelete } from "react-icons/ai";
+
 import "./TaskBoard.css";
 import { faker } from "@faker-js/faker";
 import PopupModal from "../../molecules/popupModal/PopupModal";
@@ -14,17 +21,24 @@ import toast from "react-hot-toast";
 import { serverInterceptor } from "../../../config";
 import { useStorage } from "../../../hooks/useStorage";
 import { TmsContext } from "../../../context/TaskBoardContext";
+import PulseLoader from "react-spinners/PulseLoader";
+
+// project progress context import
+import { ProgressContext } from "../../../context/ProgressContext";
 
 const taskformBackend = [
-  { id: uuid(), name: "first task", description: faker.lorem.paragraph(2) },
-  { id: uuid(), name: "second task", description: faker.lorem.paragraph(2) },
+  { id: uuid(), name: "1st task", description: faker.lorem.paragraph(2) },
+  { id: uuid(), name: "2nd task", description: faker.lorem.paragraph(2) },
+  { id: uuid(), name: "3rd task", description: faker.lorem.paragraph(2) },
+  { id: uuid(), name: "4th task", description: faker.lorem.paragraph(2) },
+  { id: uuid(), name: "5th task", description: faker.lorem.paragraph(2) },
 ];
 
 const list = {
-  [uuid()]: {
-    task_status: "Backlogs",
-    tasks: [],
-  },
+  // [uuid()]: {
+  //   task_status: "Backlogs",
+  //   tasks: [],
+  // },
   [uuid()]: {
     task_status: "To do",
     tasks: [],
@@ -37,10 +51,10 @@ const list = {
   //   task_status: "Ready for Review",
   //   tasks: [],
   // },
-  // [uuid()]: {
-  //   task_status: "Completed",
-  //   tasks: [],
-  // },
+  [uuid()]: {
+    task_status: "Completed",
+    tasks: [],
+  },
 };
 
 // handle drag and drop changes
@@ -53,6 +67,7 @@ const onDragEnd = (result, columns, setColumns) => {
   // console.log("this is dropableId: ", result.draggableId);
 
   // if (result.source[0].droggableId === result.description.droppableId) return;
+
   if (!result.destination) return;
   const { source, destination } = result;
 
@@ -62,6 +77,7 @@ const onDragEnd = (result, columns, setColumns) => {
     const destColumn = columns[destination.droppableId];
     const sourceTasks = [...sourceColumn.tasks];
     const destTasks = [...destColumn.tasks];
+    let completed = false;
 
     const [removed] = sourceTasks.splice(source.index, 1);
     destTasks.splice(destination.index, 0, removed);
@@ -77,6 +93,34 @@ const onDragEnd = (result, columns, setColumns) => {
         tasks: destTasks,
       },
     });
+
+    if (destColumn?.task_status === "Completed") completed = true;
+
+    const data = {
+      sourceStatusId: source.droppableId,
+      destStatusId: destination.droppableId,
+      taskid: removed.id,
+      completed,
+    };
+
+    //update the status of the task in the backend
+    serverInterceptor
+      .post("/tasks/updatOnDrag&Drop", data, {
+        headers: {
+          "Access-Control-Allow-Credentials": true,
+          Accept: "application/json",
+        },
+      })
+      .then((response) => {
+        if (response && response.data.newTaskStatus) {
+          toast.success("task status successfully updated");
+          console.log(
+            "task status successfully updated",
+            response.data.newTaskStatus
+          );
+        }
+      })
+      .catch((err) => console.log("Error updating task status", err));
   } else {
     const column = columns[source.droppableId];
     const copiedTasks = [...column.tasks];
@@ -110,8 +154,11 @@ const TaskBoard = () => {
   const [errMsg, setErrMsg] = useState("");
   const [listName, setListName] = useState("");
   const [rendered, setRendered] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const { selectedProject } = useContext(TmsContext);
+
+  const { setProgress } = useContext(ProgressContext);
 
   const { token } = useStorage("token");
 
@@ -123,10 +170,11 @@ const TaskBoard = () => {
   useEffect(() => {
     setDisabled(false);
     setErrMsg("");
-  }, [rendered]);
+  }, []);
 
   useEffect(() => {
     const fetchProjects = () => {
+      setIsLoading(true);
       let data = { id: selectedProject?.id };
       serverInterceptor
         .post("projectStatus/ofproject", data, {
@@ -137,23 +185,26 @@ const TaskBoard = () => {
           },
         })
         .then((response) => {
-          if (response && response.data) {
+          if (response && response.data.formatedStatuses) {
             console.log(
               "\n \n all project status:",
               new Set(response.data.formatedStatuses)
             );
-            const columnsStatus = response?.data?.formatedStatuses?.reverse().reduce(
-              (obj, status) => {
+            setIsLoading(false);
+            const columnsStatus = response?.data?.formatedStatuses
+              ?.reverse()
+              .reduce((obj, status) => {
                 const key = Object.keys(status)[0];
                 obj[key] = status[key];
                 return obj;
-              },
-              {}
-            );
+              }, {});
             setColumns(columnsStatus);
           }
         })
-        .catch((err) => console.log("Error getting project status", err));
+        .catch((err) => {
+          console.log("Error getting project status", err);
+          setIsLoading(false);
+        });
     };
 
     fetchProjects();
@@ -180,7 +231,7 @@ const TaskBoard = () => {
   const addTask = useCallback(
     async (e) => {
       e.preventDefault();
-
+      setIsLoading(true);
       const data = {
         name: taskName,
         description: taskDescription,
@@ -195,10 +246,12 @@ const TaskBoard = () => {
               Accept: "application/json",
             },
           });
-          if (response && response.data) {
+          if (response && response.data.task) {
             toast.success("task successfully created");
             console.log("task created", response?.data?.task);
-           
+
+            setIsLoading(false);
+
             const column = columns[currentStatusId];
             setColumns({
               ...columns,
@@ -208,13 +261,14 @@ const TaskBoard = () => {
                 tasks: [...column.tasks, response?.data?.task],
               },
             });
-             setTaskList([...column.tasks, response?.data?.task]);
+            setTaskList([...column.tasks, response?.data?.task]);
             setTaskDescription("");
             setTaskName("");
+            setIsLoading(false);
           }
         } catch (err) {
           toast.error("Failed to create a task.");
-
+          setIsLoading(false);
           console.log(err?.data?.message);
           if (!err.status) {
             setErrMsg("No Server Response");
@@ -241,6 +295,7 @@ const TaskBoard = () => {
   );
 
   const addNewTaskList = async () => {
+    setIsLoading(true);
     const data = {
       projectId: selectedProject?.id,
       designation: listName,
@@ -255,7 +310,7 @@ const TaskBoard = () => {
           },
         });
         console.log("project status", response.data);
-        if (response && response.data) {
+        if (response && response.data && response.data.status) {
           toast.success("new column successfully created");
           console.log("project status", response.data);
           setColumns({
@@ -267,10 +322,11 @@ const TaskBoard = () => {
           });
 
           setListName("");
+          setIsLoading(false);
         }
       } catch (err) {
         toast.error("Failed to create a task.");
-
+        setIsLoading(false);
         console.log(err);
         if (!err.status) {
           setErrMsg("No Server Response");
@@ -306,12 +362,11 @@ const TaskBoard = () => {
       // if (columns[currentStatusId]?.task_status === lastColumn.task_status) {
       //   setTaskcompleted(true);
       // }
-
+      setIsLoading(true);
       const data = {
         id: editTask.id,
         name: editName,
         description: editDescription,
-        // projectStatusId: currentStatusId,
         completed: taskcompleted,
       };
       if (token) {
@@ -323,19 +378,18 @@ const TaskBoard = () => {
               Accept: "application/json",
             },
           });
-          if (response && response.data) {
+          if (response && response.data.updatedTask) {
             toast.success("task successfully updated");
             console.log("task updated", response?.data?.updatedTask);
             setRendered(true);
-          
-            // setColumns();
+            setIsLoading(false);
 
             setTaskDescription("");
             setTaskName("");
           }
         } catch (err) {
           toast.error("Failed to create a task.");
-
+          setIsLoading(false);
           console.log(err);
           if (!err.status) {
             setErrMsg("No Server Response");
@@ -364,7 +418,105 @@ const TaskBoard = () => {
 
   const errClass = errMsg ? "mgs" : "offscreen";
 
-  return (
+  // handle list movement/ change list position
+  // handel move task forward
+  const handleMoveNext = (id) => {
+    console.clear();
+    const columnKeys = Object.keys(columns);
+
+    const originalIndex = columnKeys.findIndex((item) => item === id);
+    const nextIndex = originalIndex + 1;
+
+    if (nextIndex > columnKeys.length - 1) return;
+
+    const tempVal = columnKeys[originalIndex];
+
+    columnKeys[originalIndex] = columnKeys[nextIndex];
+
+    columnKeys[nextIndex] = tempVal;
+
+    const result = columnKeys.reduce((acc, current) => {
+      return {
+        ...acc,
+        [current]: columns[current],
+      };
+    }, {});
+    setColumns(result);
+    // console.log("columns: ", columns);
+
+    // console.log("result: ", result);
+  };
+
+  // hande move task previous
+  const handelMovePrev = (id) => {
+    const columnKeys = Object.keys(columns);
+    const originalIndex = columnKeys.findIndex((item) => item === id);
+    const nextIndex = originalIndex - 1;
+
+    if (nextIndex < 0) return;
+
+    const tempVal = columnKeys[originalIndex];
+
+    columnKeys[originalIndex] = columnKeys[nextIndex];
+
+    columnKeys[nextIndex] = tempVal;
+
+    const result = columnKeys.reduce((acc, current) => {
+      return {
+        ...acc,
+        [current]: columns[current],
+      };
+    }, {});
+    setColumns(result);
+  };
+
+  const handleChange = (e) => {
+    setListName(e.target.value);
+    setErrMsg("");
+  };
+  // handle task completed count
+  const completedPecentage = () => {
+    let totalTask = 0;
+    const columnValue = Object.values(columns);
+    // console.log("columnValue", columnValue);
+    columnValue?.forEach((column) => {
+      totalTask += column["tasks"]?.length;
+      return totalTask;
+    });
+    const completedTask = columnValue.find(
+      (column) => column["task_status"] === "Completed"
+    );
+
+    const percentage = (completedTask["tasks"]?.length / totalTask) * 100;
+    // update progress bar
+    setProgress(percentage);
+    console.clear();
+    // console.log("totalTask: ", totalTask);
+    // console.log("completed: ", completedTask["tasks"].length);
+    // console.log("percentage: ", percentage);
+  };
+
+  //  completedPecentage();
+  // handle delete column
+  const handleDeleteColumn = (id) => {
+    const columnKeys = Object.keys(columns);
+    const updatedColumns = columnKeys.filter((column) => column !== id);
+
+    const result = updatedColumns.reduce((acc, current) => {
+      return {
+        ...acc,
+        [current]: columns[current],
+      };
+    }, {});
+    setColumns(result);
+    console.clear();
+    // console.log("updatedColumns", result);
+    // console.log("columns", columns);
+  };
+
+  const loader = <PulseLoader color="#0707a0" size={15} />;
+
+  const content = (
     <>
       {showAddTask && <OverLay action={togglePopup} />}
       {openTask && <OverLay action={handleOpentask} />}
@@ -372,6 +524,8 @@ const TaskBoard = () => {
         {showAddTask && (
           <div className="add-task">
             <PopupModal onClick={togglePopup} title={`Add new task `}>
+              {isLoading && <PulseLoader color="#0707a0" size={15} />}
+
               <PopupForm
                 inputText="Enter task name"
                 value={taskName}
@@ -397,7 +551,33 @@ const TaskBoard = () => {
             return (
               <div className="columns" key={id}>
                 <div className="list-hearder">
-                  <h3>{column.task_status}</h3>
+                  <div className="list-options">
+                    <h3>{column.task_status}</h3>
+                    <div className="list-action">
+                      <Tippy content="delete list" className="tippy-button">
+                        <button onClick={() => handleDeleteColumn(id)}>
+                          <span className="delete-list">
+                            <AiOutlineDelete />
+                          </span>
+                        </button>
+                      </Tippy>
+                      <Tippy content="move left" className="tippy-button">
+                        <button onClick={() => handelMovePrev(id)}>
+                          <span>
+                            <GrFormPrevious />
+                          </span>
+                        </button>
+                      </Tippy>
+                      <Tippy content="move right" className="tippy-button">
+                        <button onClick={() => handleMoveNext(id)}>
+                          <span>
+                            <MdNavigateNext />
+                          </span>
+                        </button>
+                      </Tippy>
+                    </div>
+                  </div>
+
                   <button
                     className="add-list-btn"
                     onClick={() => togglePopup(id)}
@@ -478,6 +658,7 @@ const TaskBoard = () => {
             onClick={handleOpentask}
             editTask={updateTask}
             task={editTask}
+            isLoading={isLoading}
           />
         )}
         <button
@@ -492,6 +673,7 @@ const TaskBoard = () => {
           <div className="addListForm">
             {" "}
             <PopupModal onClick={() => setOpenAddList(!openAddList)}>
+              {isLoading && <PulseLoader color="#0707a0" size={15} />}
               <div className="addForm">
                 <p className={errClass} aria-live="assertive">
                   {errMsg}
@@ -502,7 +684,7 @@ const TaskBoard = () => {
                   type="text"
                   placeholder="Enter List name"
                   value={listName}
-                  onChange={(e) => setListName(e.target.value)}
+                  onChange={handleChange}
                 />
                 <button onClick={addNewTaskList}>Add List</button>
               </div>
@@ -512,6 +694,7 @@ const TaskBoard = () => {
       </div>
     </>
   );
+  return <>{isLoading ? loader : content}</>;
 };
 
 export default TaskBoard;
