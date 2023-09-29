@@ -29,7 +29,7 @@ const Dashboard = () => {
   const [user, setUser] = useState(null);
   const [openProfile, setOpenProfile] = useState(false);
 
-  const { token } = useStorage("token");
+  const { token, setStorToken } = useStorage("token");
 
   const { profilePict, setProfilePict } = useContext(TmsContext);
 
@@ -40,7 +40,6 @@ const Dashboard = () => {
     setOpenProfile(!openProfile);
   };
 
-  const {setStorToken} = useStorage('token',' ');
   const { setlsData } = useLocalStorage("refreshToken", " ");
 
   console.log("this is user data", { email, username, picture });

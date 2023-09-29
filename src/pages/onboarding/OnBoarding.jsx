@@ -46,7 +46,7 @@ function OnBoarding() {
 
   (function () {
     if (location.pathname.includes("/onboarding") && !token)
-      navigate("/dashboard", { replace: true });
+      navigate("/login", { replace: true });
   })();
 
   const handlePrev = () => setCurrentStep(currentStep - 1);
