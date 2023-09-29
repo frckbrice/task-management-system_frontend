@@ -33,8 +33,8 @@ const Dashboard = () => {
 
   const { profilePict, setProfilePict } = useContext(TmsContext);
 
-  const { email, username, picture } = userAuth(token);
-  if (picture) setProfilePict(picture);
+  // const { email, username, picture } = userAuth(token);
+  // if (picture) setProfilePict(picture);
 
   const toggleProfile = () => {
     setOpenProfile(!openProfile);
@@ -42,7 +42,7 @@ const Dashboard = () => {
 
   const { setlsData } = useLocalStorage("refreshToken", " ");
 
-  console.log("this is user data", { email, username, picture });
+ 
 
   // useEffect(() => {
   //   if (!user) {
