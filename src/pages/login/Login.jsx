@@ -76,10 +76,10 @@ function Login() {
                 .then((resp) => {
                   if (resp && resp.data) {
                     console.log("registered data: ", resp.data);
-                    const { email } = resp.data;
-                    let data = {
-                      email,
-                    };
+                   const email = resp.data;
+                   let data = {
+                     email,
+                   };
                     server
                       .post(
                         "/auth/googleLogin",
