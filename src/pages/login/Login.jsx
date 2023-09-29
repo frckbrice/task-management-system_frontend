@@ -30,14 +30,14 @@ function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const [move, setMove] = useState(false);
 
-  // const { setToken } = useContext(TmsContext);
+  const { setProfilePict } = useContext(TmsContext);
   const { setlsData } = useLocalStorage("setRefreshToken", " ");
   const { setStorToken } = useStorage("token", " ");
 
-  // useEffect(() => {
-  //   // userRef.current.focus();
-  //   if (move) navigate("/onboarding");
-  // }, [move, navigate]);
+  useEffect(() => {
+    // userRef.current.focus();
+    if (move) navigate("/onboarding");
+  }, [move, navigate]);
 
   useEffect(() => {
     setErrMsg("");
@@ -47,9 +47,7 @@ function Login() {
   const login = useGoogleLogin({
     onSuccess: (codeResponse) => {
       console.log("login goood");
-     
       setIsLoading(true);
-       console.log(conf.googleapis);
       setUser(codeResponse);
       if (codeResponse) {
         axios
@@ -60,8 +58,7 @@ function Login() {
             },
           })
           .then((res) => {
-            console.log(res.data)
-            // setProfile(res.data);
+            setProfile(res.data);
             if (res && res.data) {
               console.log("connection to the backend : registration");
               let data = {
@@ -71,6 +68,7 @@ function Login() {
                 id: res.data.id,
               };
               console.log(data);
+              setProfilePict(res.data.picture);
               server
                 .post("/auth/googleRegister", data, {
                   headers: conf.headers,
@@ -78,9 +76,9 @@ function Login() {
                 .then((resp) => {
                   if (resp && resp.data) {
                     console.log("registered data: ", resp.data);
-                    const { email } = resp.data;
+
                     let data = {
-                      email,
+                      email: resp.data,
                     };
                     server
                       .post(
@@ -98,9 +96,8 @@ function Login() {
                         if (
                           response &&
                           response.data &&
-                          response.data.accessToken
+                          response.status === 200
                         ) {
-                          setIsLoading(false);
                           setMove(true);
                           console.log(
                             "User successfully logged in! tokens: ",
@@ -111,6 +108,7 @@ function Login() {
 
                           setlsData(response.data.refreshToken);
                           navigate("/onboarding");
+                          setIsLoading(false);
                           // navigate to onboarding page
                         }
                         setEmail("");
@@ -118,20 +116,22 @@ function Login() {
                       })
                       .catch((err) => {
                         console.log("error loging in", err.code, err.message);
-                        toast.success("Failed to log in");
+                        toast.error("Failed to log in");
                         setMove(false);
 
-                        if (!err.status) {
+                        if (!err.response.status) {
                           setErrMsg("No Server Response");
-                        } else if (err.status === 400) {
-                          setErrMsg("Missing some useful information");
-                        } else if (err.status === 401) {
+                        } else if (err.response.status === 400) {
+                          setErrMsg("Missing Username or Password");
+                        } else if (err.response.status === 401) {
                           setErrMsg("Unauthorized");
-                        } else if (err.status === 403) {
+                        } else if (err.response.status === 403) {
                           setErrMsg("Forbidden");
+                        } else if (err.response.status === 409) {
+                          setErrMsg("This email already exist");
                         } else {
                           setErrMsg(err.data?.message);
-                          console.error(err.data?.message);
+                          console.error(err.response.data?.message);
                         }
                       })
                       .finally(() => setIsLoading(false));
@@ -158,12 +158,13 @@ function Login() {
     },
   });
 
-  console.log(user);
-  console.log(profile);
+  // console.log(user);
+  // console.log(profile);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsLoading(true);
+    console.log("\nhandle submit fired\n");
     if (email && password) {
       if (password.length >= 6 && /\d/.test(password)) {
         let data = {
@@ -187,9 +188,9 @@ function Login() {
               setMove(true);
               console.log("Login successful!", res.data);
               setStorToken(res.data.accessToken);
-
               setlsData(res.data.refreshToken);
               navigate("/onboarding"); // navigate to onboarding page
+              setIsLoading(false);
             }
             setEmail("");
             setPassword("");
@@ -199,17 +200,19 @@ function Login() {
 
             console.log("error login in", err.message);
 
-            if (!err.status) {
+            if (!err.response.status) {
               setErrMsg("No Server Response");
-            } else if (err.status === 400) {
+            } else if (err.response.status === 400) {
               setErrMsg("Missing Username or Password");
-            } else if (err.status === 401) {
+            } else if (err.response.status === 401) {
               setErrMsg("Unauthorized");
-            } else if (err.status === 403) {
+            } else if (err.response.status === 403) {
               setErrMsg("Forbidden");
+            } else if (err.response.status === 409) {
+              setErrMsg("This email already exist");
             } else {
               setErrMsg(err.data?.message);
-              console.error(err.data?.message);
+              console.error(err.response.data?.message);
             }
           })
           .finally(() => setIsLoading(false));
@@ -235,15 +238,15 @@ function Login() {
     ));
   } else {
     content = (
-      <div>
+      <div className="allForm">
         <NavBar />
 
         <div className="formlogin">
-          <form className="loginform">
+          <form className="loginform" onSubmit={handleSubmit}>
             <p ref={errorRef} className={errClass} aria-live="assertive">
               {errMsg}
             </p>
-            <div className="innerform" onSubmit={handleSubmit}>
+            <div className="innerform">
               <div className="credential">
                 {" "}
                 <h2 className="loginform-h2">Login</h2>
@@ -262,9 +265,9 @@ function Login() {
                   className="loginforminput"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  autocompleted="off"
                   ref={userRef}
                   required
-                  autoComplete="off"
                 />
               </div>
 
