@@ -16,8 +16,9 @@ const ContextProvider = ({ children }) => {
   const [profilePict, setProfilePict] = useState("");
   const [isLoad, setIsLoad] = useState(false);
   const [progress, setProgress] = useState(0);
-  const [openAddList, setOpenAddList] = useState(false);
+
   const [projects, setProjects] = useState(false);
+  const [openAddList, setOpenAddList] = useState(false);
 
   console.log("project data", projectData);
 

@@ -26,8 +26,10 @@ const ProjectDetialsBar = () => {
   const [emailDescription, setEmailDescription] = useState("");
   const [disabled, setDisabled] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const { selectedProject, openAddList, setOpenAddList } =
+
+  const { selectedProject, setOpenAddList, openAddList } =
     useContext(TmsContext);
+
   const { token } = useStorage("token");
 
   console.log({ token });
@@ -39,6 +41,11 @@ const ProjectDetialsBar = () => {
     setDisabled(false);
     setErrMsg("");
   }, []);
+
+  const handleOpenAddList = () => {
+    if (!openAddList) alert("Select project first or create a new project");
+    setOpenAddList((openAddList) => !openAddList);
+  };
 
   const closePopup = () => {
     setShowPopup(!showPopup);
@@ -131,10 +138,7 @@ const ProjectDetialsBar = () => {
             </DashActionBtn>
           </div>
           <div>
-            <button
-              className="add-listp"
-              onClick={() => setOpenAddList((openAddList) => !openAddList)}
-            >
+            <button className="add-listp" onClick={() => handleOpenAddList()}>
               add list
             </button>
           </div>

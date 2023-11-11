@@ -6,13 +6,17 @@
   justify-content: space-between;
   position: static;
   width: 99%;
-  background-color: #0c66e4;
+  /* background-color: #0c66e421;
+   */
+  background-color: #d9d9dd;
+  border: none;
 }
 
 .favicon {
   width: 50px;
   background-color: white;
   border-radius: 50%;
+  border: none;
 }
 
 .right-iterms {
