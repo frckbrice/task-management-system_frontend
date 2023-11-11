@@ -13,8 +13,12 @@ const ContextProvider = ({ children }) => {
   const [isRefreshSuccess, setIsRefreshSuccess] = useState(true);
   const [isRefreshError, setIsRefreshError] = useState(false);
   const [memberofProject, setMembersofProject] = useState([]);
-  const [profilePict, setProfilePict] = useState('');
+  const [profilePict, setProfilePict] = useState("");
   const [isLoad, setIsLoad] = useState(false);
+  const [progress, setProgress] = useState(0);
+
+  const [projects, setProjects] = useState(false);
+  const [openAddList, setOpenAddList] = useState(false);
 
   console.log("project data", projectData);
 
@@ -25,7 +29,8 @@ const ContextProvider = ({ children }) => {
     setProjectData,
     email,
     setEmail,
-   isLoad, setIsLoad,
+    isLoad,
+    setIsLoad,
     isRefreshSuccess,
     setIsRefreshSuccess,
     isRefreshError,
@@ -36,8 +41,14 @@ const ContextProvider = ({ children }) => {
     setProjectStatus,
     memberofProject,
     setMembersofProject,
-    profilePict,
     setProfilePict,
+    profilePict,
+    progress,
+    setProgress,
+    openAddList,
+    setOpenAddList,
+    projects,
+    setProjects,
   };
 
   return <TmsContext.Provider value={values}>{children} </TmsContext.Provider>;
