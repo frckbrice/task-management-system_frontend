@@ -70,9 +70,17 @@ function Login() {
               console.log(data);
               setProfilePict(res.data.picture);
               server
-                .post("/auth/googleRegister", data, {
-                  headers: conf.headers,
-                })
+                .post(
+                  "/auth/googleRegister",
+                  data,
+                  {
+                    headers: conf.headers,
+                  },
+                  {
+                    withCredentials: true,
+                    mode: "cors",
+                  }
+                )
                 .then((resp) => {
                   if (resp && resp.data) {
                     console.log("registered data: ", resp.data);
